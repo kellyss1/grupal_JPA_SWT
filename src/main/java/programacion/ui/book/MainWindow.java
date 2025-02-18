@@ -3,10 +3,12 @@ package programacion.ui.book;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import programacion.repositorio.interfaces.BookRepository;
+import programacion.ui.SelectionWindow;
 
 public class MainWindow {
     private Shell shell;
     private BookRepository bookRepository;
+    private SelectionWindow selectionWindow;
 
     public MainWindow(Display display, BookRepository bookRepository) {
         this.bookRepository = bookRepository;
@@ -17,7 +19,7 @@ public class MainWindow {
     }
 
     private void createUI() {
-        BookList bookList = new BookList(shell.getDisplay(), bookRepository);
+        BookList bookList = new BookList(shell.getDisplay(), bookRepository, selectionWindow);
         bookList.open();
     }
 

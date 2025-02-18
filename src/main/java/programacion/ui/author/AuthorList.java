@@ -1,9 +1,12 @@
 package programacion.ui.author;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
 import programacion.db.Author;
 import programacion.repositorio.interfaces.AuthorRepository;
+import programacion.ui.SelectionWindow;
 
 import java.util.List;
 
@@ -12,14 +15,19 @@ public class AuthorList {
     private Table table;
     private Text searchText;
     private AuthorRepository authorRepository;
+    private SelectionWindow selectionWindow;
 
-    public AuthorList(Display display, AuthorRepository authorRepository) {
+    public AuthorList(Display display, AuthorRepository authorRepository, SelectionWindow selectionWindow) {
         this.authorRepository = authorRepository;
+        this.selectionWindow = selectionWindow;
         shell = new Shell(display);
         shell.setText("Lista de Autores");
-        shell.setSize(400, 350);
+        shell.setSize(450, 400);
+        shell.setLayout(new GridLayout(1, false));
+
         createTable();
         createSearchBox();
+        createButtons();
         loadAuthors();
     }
 
@@ -27,23 +35,46 @@ public class AuthorList {
         table = new Table(shell, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
         table.setHeaderVisible(true);
         table.setLinesVisible(true);
-        table.setBounds(10, 10, 380, 200);
+        table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
         String[] titles = { "ID", "Nombre", "Apellido" };
         for (String title : titles) {
             TableColumn column = new TableColumn(table, SWT.NONE);
             column.setText(title);
-            column.setWidth(100);
+            column.setWidth(150);
         }
+    }
 
-        Button addButton = new Button(shell, SWT.PUSH);
+    private void createSearchBox() {
+        Composite searchComposite = new Composite(shell, SWT.NONE);
+        searchComposite.setLayout(new GridLayout(3, false));
+        searchComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+
+        Label searchLabel = new Label(searchComposite, SWT.NONE);
+        searchLabel.setText("Buscar por Nombre:");
+
+        searchText = new Text(searchComposite, SWT.BORDER);
+        searchText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+
+        Button searchButton = new Button(searchComposite, SWT.PUSH);
+        searchButton.setText("Buscar");
+        searchButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+        searchButton.addListener(SWT.Selection, event -> searchAuthors());
+    }
+
+    private void createButtons() {
+        Composite buttonComposite = new Composite(shell, SWT.NONE);
+        buttonComposite.setLayout(new GridLayout(4, true));
+        buttonComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+
+        Button addButton = new Button(buttonComposite, SWT.PUSH);
         addButton.setText("Añadir");
-        addButton.setBounds(10, 220, 80, 30);
+        addButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
         addButton.addListener(SWT.Selection, event -> openForm(null));
 
-        Button editButton = new Button(shell, SWT.PUSH);
+        Button editButton = new Button(buttonComposite, SWT.PUSH);
         editButton.setText("Editar");
-        editButton.setBounds(100, 220, 80, 30);
+        editButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
         editButton.addListener(SWT.Selection, event -> {
             int selectedIndex = table.getSelectionIndex();
             if (selectedIndex != -1) {
@@ -52,9 +83,9 @@ public class AuthorList {
             }
         });
 
-        Button deleteButton = new Button(shell, SWT.PUSH);
+        Button deleteButton = new Button(buttonComposite, SWT.PUSH);
         deleteButton.setText("Eliminar");
-        deleteButton.setBounds(190, 220, 80, 30);
+        deleteButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
         deleteButton.addListener(SWT.Selection, event -> {
             int selectedIndex = table.getSelectionIndex();
             if (selectedIndex != -1) {
@@ -63,20 +94,14 @@ public class AuthorList {
                 loadAuthors();
             }
         });
-    }
 
-    private void createSearchBox() {
-        Label searchLabel = new Label(shell, SWT.NONE);
-        searchLabel.setText("Buscar por Nombre:");
-        searchLabel.setBounds(10, 260, 100, 25);
-
-        searchText = new Text(shell, SWT.BORDER);
-        searchText.setBounds(120, 260, 180, 25);
-
-        Button searchButton = new Button(shell, SWT.PUSH);
-        searchButton.setText("Buscar");
-        searchButton.setBounds(310, 260, 80, 30);
-        searchButton.addListener(SWT.Selection, event -> searchAuthors());
+        Button backButton = new Button(buttonComposite, SWT.PUSH);
+        backButton.setText("Volver");
+        backButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+        backButton.addListener(SWT.Selection, event -> {
+            shell.dispose(); // Cierra la ventana actual
+            selectionWindow.open(); // Abre la ventana SelectionWindow usando la instancia correcta
+        });
     }
 
     private void searchAuthors() {

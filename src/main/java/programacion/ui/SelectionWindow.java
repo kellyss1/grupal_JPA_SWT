@@ -34,12 +34,14 @@ public class SelectionWindow {
     }
 
     private void openBookCRUD() {
-        BookList bookList = new BookList(shell.getDisplay(), bookRepository);
+        //shell.close();
+        BookList bookList = new BookList(shell.getDisplay(), bookRepository, this);
         bookList.open();
     }
 
     private void openAuthorCRUD() {
-        AuthorList authorList = new AuthorList(shell.getDisplay(), authorRepository);
+       // shell.close();
+        AuthorList authorList = new AuthorList(shell.getDisplay(), authorRepository,this);
         authorList.open();
     }
 

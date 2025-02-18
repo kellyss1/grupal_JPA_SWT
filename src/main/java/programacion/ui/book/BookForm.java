@@ -1,6 +1,8 @@
 package programacion.ui.book;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
 import programacion.db.Book;
 import programacion.repositorio.interfaces.BookRepository;
@@ -13,45 +15,66 @@ public class BookForm {
     private Text authorIdText;
     private BookRepository bookRepository;
     private Book book;
+    private BookList booklist;
 
-    public BookForm(Display display, BookRepository bookRepository, Book book) {
+    public BookForm(Display display, BookRepository bookRepository, Book book, BookList booklist) {
         this.bookRepository = bookRepository;
         this.book = book;
+        this.booklist = booklist;
         shell = new Shell(display);
         shell.setText("Formulario de Libro");
-        shell.setSize(300, 250);
+        shell.setSize(400, 250);
+        shell.setLayout(new GridLayout(2, false)); // Usa GridLayout para organizar los elementos
+
         createForm();
     }
 
     private void createForm() {
         Label titleLabel = new Label(shell, SWT.NONE);
         titleLabel.setText("Título:");
-        titleLabel.setBounds(10, 10, 80, 25);
+        titleLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
+
         titleText = new Text(shell, SWT.BORDER);
-        titleText.setBounds(100, 10, 180, 25);
+        titleText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
         Label isbnLabel = new Label(shell, SWT.NONE);
         isbnLabel.setText("ISBN:");
-        isbnLabel.setBounds(10, 40, 80, 25);
+        isbnLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
+
         isbnText = new Text(shell, SWT.BORDER);
-        isbnText.setBounds(100, 40, 180, 25);
+        isbnText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
         Label priceLabel = new Label(shell, SWT.NONE);
         priceLabel.setText("Precio:");
-        priceLabel.setBounds(10, 70, 80, 25);
+        priceLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
+
         priceText = new Text(shell, SWT.BORDER);
-        priceText.setBounds(100, 70, 180, 25);
+        priceText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
         Label authorIdLabel = new Label(shell, SWT.NONE);
         authorIdLabel.setText("ID del Autor:");
-        authorIdLabel.setBounds(10, 100, 80, 25);
-        authorIdText = new Text(shell, SWT.BORDER);
-        authorIdText.setBounds(100, 100, 180, 25);
+        authorIdLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
 
-        Button saveButton = new Button(shell, SWT.PUSH);
+        authorIdText = new Text(shell, SWT.BORDER);
+        authorIdText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+
+        // Sección de botones en un Composite con GridLayout
+        Composite buttonComposite = new Composite(shell, SWT.NONE);
+        buttonComposite.setLayout(new GridLayout(2, true));
+        buttonComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
+
+        Button saveButton = new Button(buttonComposite, SWT.PUSH);
         saveButton.setText("Guardar");
-        saveButton.setBounds(100, 140, 80, 30);
+        saveButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
         saveButton.addListener(SWT.Selection, event -> saveBook());
+
+        Button backButton = new Button(buttonComposite, SWT.PUSH);
+        backButton.setText("Volver");
+        backButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+        backButton.addListener(SWT.Selection, event -> {
+            shell.dispose();
+            booklist.open();
+        });
 
         if (book != null) {
             titleText.setText(book.getTitulo());

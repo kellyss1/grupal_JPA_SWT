@@ -1,2 +1,2 @@
-rootProject.name = "grupal-progra"
+rootProject.name = "grupal_JPA_SWT"
 

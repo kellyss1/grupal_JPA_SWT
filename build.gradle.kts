@@ -34,6 +34,19 @@ dependencies {
     implementation("org.eclipse.swt:org.eclipse.swt.win32.win32.x86_64:4.3")
 
 }
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}
+
+tasks.withType<ProcessResources> {
+    filesMatching("**/*.properties") {
+        filteringCharset = "UTF-8"
+    }
+}
+
+tasks.withType<JavaExec> {
+    jvmArgs = listOf("-Dfile.encoding=UTF-8")
+}
 
 sourceSets {
     main {
