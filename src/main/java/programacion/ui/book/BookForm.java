@@ -1,6 +1,9 @@
 package programacion.ui.book;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
@@ -23,9 +26,11 @@ public class BookForm {
         this.booklist = booklist;
         shell = new Shell(display);
         shell.setText("Formulario de Libro");
-        shell.setSize(400, 250);
+        shell.setSize(400, 300);
         shell.setLayout(new GridLayout(2, false)); // Usa GridLayout para organizar los elementos
 
+        Color customColor = new Color(display, 161, 35, 25); // RGB: Azul Claro
+        shell.setBackground(customColor);
         createForm();
     }
 
@@ -62,15 +67,31 @@ public class BookForm {
         Composite buttonComposite = new Composite(shell, SWT.NONE);
         buttonComposite.setLayout(new GridLayout(2, true));
         buttonComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
+        Color customColor = new Color(shell.getDisplay(), 161, 35, 25); // Azul personalizado
+        buttonComposite.setBackground(customColor);
+
+        // Definir el color de texto y el color de fondo
+        Color buttonTextColor = new Color(shell.getDisplay(), 255, 255, 255); // Blanco para el texto
+        Color buttonBackgroundColor = new Color(shell.getDisplay(), 0, 0, 0); // Negro para el fondo
+
+        // Cambiar la fuente
+        FontData fontData = new FontData("Arial", 10, SWT.BOLD); // Fuente Arial, tamaño 14, negrita
+        Font buttonFont = new Font(shell.getDisplay(), fontData);
 
         Button saveButton = new Button(buttonComposite, SWT.PUSH);
         saveButton.setText("Guardar");
         saveButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+        saveButton.setBackground(buttonBackgroundColor); // Establecer el color de fondo
+        saveButton.setForeground(buttonTextColor); // Establecer el color del texto
+        saveButton.setFont(buttonFont); // Establecer la fuente
         saveButton.addListener(SWT.Selection, event -> saveBook());
 
         Button backButton = new Button(buttonComposite, SWT.PUSH);
         backButton.setText("Volver");
         backButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+        backButton.setBackground(buttonBackgroundColor); // Establecer el color de fondo
+        backButton.setForeground(buttonTextColor); // Establecer el color del texto
+        backButton.setFont(buttonFont); // Establecer la fuente
         backButton.addListener(SWT.Selection, event -> {
             shell.dispose();
             booklist.open();

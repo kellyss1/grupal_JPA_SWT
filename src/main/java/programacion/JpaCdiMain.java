@@ -35,7 +35,7 @@ public class JpaCdiMain {
 //        repoAuthors.attachAndRemove(repoAuthors.findById(12L));
 
 
-        System.setProperty("file.encoding", "UTF-8");
+       // System.setProperty("file.encoding", "UTF-8");
         SeContainer container = SeContainerInitializer.newInstance().initialize();
         BookRepository bookRepository = container.select(BookRepository.class).get();
         AuthorRepository authorRepository = container.select(AuthorRepository.class).get();
