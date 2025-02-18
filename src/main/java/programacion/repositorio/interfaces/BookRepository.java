@@ -18,5 +18,8 @@ public interface BookRepository {
 
     // Eliminar un libro por su ID
     void delete(Long id);
+
+    //Encontrar el libro con el precio mas alto
+    Book findMaxPriceBook();
 }
 

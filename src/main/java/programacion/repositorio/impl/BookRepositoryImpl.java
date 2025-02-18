@@ -10,6 +10,7 @@ import programacion.repositorio.interfaces.BookRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ForkJoinPool;
 
 @ApplicationScoped
 @Transactional
@@ -61,6 +62,14 @@ public class BookRepositoryImpl implements BookRepository {
             em.remove(book);  // Eliminar el libro de la base de datos
         }
         em.getTransaction().commit();
+    }
+
+    @Override
+    public Book findMaxPriceBook() {
+        List<Book> books = findAll();
+        ForkJoinPool pool = new ForkJoinPool();
+        MaxPriceBookTask task = new MaxPriceBookTask(books, 0, books.size());
+        return pool.invoke(task);
     }
 
 }

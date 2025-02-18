@@ -63,6 +63,26 @@ public class BookList {
                 loadBooks();
             }
         });
+
+        Button maxPriceButton = new Button(shell, SWT.PUSH);
+        maxPriceButton.setText("Precio Máximo");
+        maxPriceButton.setBounds(280, 220, 110, 30);
+        maxPriceButton.addListener(SWT.Selection, event -> findMaxPriceBook());
+    }
+
+    private void findMaxPriceBook() {
+        Book maxPriceBook = bookRepository.findMaxPriceBook();
+        if (maxPriceBook != null) {
+            table.removeAll();
+            TableItem item = new TableItem(table, SWT.NONE);
+            item.setText(new String[] {
+                    String.valueOf(maxPriceBook.getId()),
+                    maxPriceBook.getTitulo(),
+                    maxPriceBook.getIsbn(),
+                    String.valueOf(maxPriceBook.getPrecio())
+            });
+            item.setData(maxPriceBook);
+        }
     }
 
     private void createSearchBox() {
